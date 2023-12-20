@@ -1,15 +1,17 @@
 from data_extraction import DataExtractor
 from sqlalchemy import create_engine, inspect, text
-from database_utils import DatabaseConnector
+
 from IPython.display import display
 import pandas as pd
 import numpy as np
 import re
+import tabula
 
 class Datacleaning():
+           
     
     #cleans null values, errors with dates, incorrecrtly typed values and rows filled with the wrong information
-    def clean_user_data(self, table_name):
+    def clean_user_data(self):
         #instantiate the datafram
         self.df = DataExtractor.read_rds_table(self, table_name)    
         
@@ -34,61 +36,79 @@ class Datacleaning():
             if not re.match((r"^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$"), email) and "@@" in email:
                 self.df.email_address = self.df.email_address.str.replace("@@", "@")
         
-        # clean phone numbers to more uniform
+        return self.df
+        
+    #TODO clean phone numbers to more uniform
+
+
+    #clean card data to remove any erroneous values, null values or error with formatting
+    def clean_card_data(self):
+        data_frame = DataExtractor().retrieve_pdf_data("https://data-handling-public.s3.eu-west-1.amazonaws.com/card_details.pdf")
+        
+        #payment dates muddled formats make more uniform
+        data_frame.date_payment_confirmed =pd.to_datetime(data_frame.date_payment_confirmed, infer_datetime_format=True, errors="coerce")
+
+        #convert null to na
+        data_frame = data_frame.replace("NULL", np.nan)
+
+         #drop na rows
+        data_frame = data_frame.dropna(axis=0, how="any")
+
+        #card numbers with question marks
+        data_frame.card_number=data_frame.card_number.astype(str)
+        data_frame.card_number = data_frame.card_number.str.replace("?", "")
+        #data_frame.card_number=data_frame.card_number.astype(int)
+
+        #expire dates incorrect    
+        #reset index
+        data_frame.reset_index(inplace=True, drop=True)
+        
+        return data_frame
+
+
+
+# #card testing can delete later
+# data = Datacleaning().clean_card_data()
+# display(data.head())
+
+
+# pdfs_df = pd.concat(test_extracted)
+# pd.set_option("display.max_columns", None)
+# display(pdfs_df[11320:11340])
+# cleaned_df = Datacleaning()
+# print("\n cleaned:", cleaned_df.clean_card_data(pdfs_df[11320:11340]))
+
+
+
+
+
    
         
               
 
-            
-        
+                
 
   
 
-        return self.df
+        
         
 
 
-    # def data_type_to_numberic(self, column):
-    #     self.column = column
-    #     try:
-    #         self.column = self.column.pd.astype("int64")
-    #         return self.column
-    #     except ValueError as e:
-    #         print(f"{e}")
-    #         pass
-
-    #clean orders_table 11 columns
-        #"level_0" and "index" columns are duplicate - delete one and other index
-        #first name and last names have 105K "None" values
-        # colum "1" is full of null - remove
-
-    #clean legacy_users - 12 columns all non-null
-                
-        #there are invalid addresses without postcodes and street names
-        # phone number formts are mudled
-    
-    #clean legacy_store_details
-        #lat only has 11 non null entries
-        # lat vs latitiude
-        #some addresses are invaluie with n/a for example
-        #remove where majority of rows say na - web stores for example
-        #change logitude and latitiude to float
-        #change opening date to tadetime from yyyy-mm-dd sometimes and oct 2012 08 others
-        #change staff number to int
+  
 
 
-#testing
-orders_table = (Datacleaning().clean_user_data("legacy_users"))
-pd.set_option("display.max_columns", None)
-display(orders_table.head(10))
-#display(orders_table.info())
-# display(orders_table.groupby(["country_code"]).groups)
-#display(orders_table.describe())
+# #testing
+# orders_table = (Datacleaning().clean_user_data("legacy_users"))
+# pd.set_option("display.max_columns", None)
+# display(orders_table.head(10))
+# #display(orders_table.info())
+# # display(orders_table.groupby(["country_code"]).groups)
+# #display(orders_table.describe())
 
-count=0
-for num in orders_table["phone_number"]:
-     pattern = r'^(?!.*\s)(?!.{10,11}$)[0-9,./a-zA-Z]+$'
-     if not re.match (pattern, num):
-        print(num)
-        count+=1
-print(count)
+# count=0
+# for num in orders_table["phone_number"]:
+#      pattern = r'^(?!.*\s)(?!.{10,11}$)[0-9,./a-zA-Z]+$'
+#      if not re.match (pattern, num):
+#         print(num)
+#         count+=1
+# print(count)

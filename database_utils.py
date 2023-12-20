@@ -3,6 +3,7 @@ import psycopg2
 from sqlalchemy import create_engine, inspect, text
 import pandas as pd
 
+
 #class to connect to database
 class DatabaseConnector():
 
@@ -27,19 +28,25 @@ class DatabaseConnector():
         return inspector.get_table_names()
 
     #TODO add password
-    def upload_to_db(self, df, table):
+    def upload_to_db(self, df, table_name):
         self.df = df
-        self.table = table
-        local_engine = create_engine("postgresql+sycopg2://postgres:password@localhost:5432/Sales_Data")
-        self.df.to_sql(self.table, local_engine, if_exists="replace")
+        self.table_name = table_name
+        password_db = input("database password? ")
+        #local_engine = create_engine(f"postgresql+sycopg2://postgres:{password_db}@localhost:5432/Sales_Data")
+        self.df.to_sql(self.table_name, local_engine, if_exists="replace")
 
 
+if __name__ == "__main__":
+    from data_cleaning import Datacleaning
+    from data_extraction import DataExtractor
+    print("All Database tables:", DatabaseConnector().list_db_tables())
+    DatabaseConnector().upload_to_db(Datacleaning().clean_user_data(), "dim_users")  
 
-        
+    DatabaseConnector().upload_to_db(Datacleaning().clean_card_data(), "dim_card_details")  
 
-#testing methods- can delete later 
-test_class = DatabaseConnector()
-dict_test = test_class.read_db_creds()
-test_class.init_db_engine()
-test_class.list_db_tables()
+# #testing methods- can delete later 
+# test_class = DatabaseConnector()
+# dict_test = test_class.read_db_creds()
+# test_class.init_db_engine()
+# test_class.list_db_tables()
 

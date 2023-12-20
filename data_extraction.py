@@ -2,6 +2,7 @@ import pandas as pd
 from sqlalchemy import create_engine, inspect, text
 from database_utils import DatabaseConnector
 from IPython.display import display
+import tabula
 
 #read data from RDS database
 class DataExtractor():
@@ -20,6 +21,13 @@ class DataExtractor():
         
         else:
             raise FileNotFoundError("This file name is not in the AWS database, retry and remember to be case-sensitive.")
-        print("step3")
+    
+    #get user card details from pdf doc
+    def retrieve_pdf_data(self, link):
+        pdf_data = tabula.read_pdf(link, pages="all", multiple_tables=True)
+        pdfs_df = pd.concat(pdf_data)
+        return pdfs_df
+    
+   
 
 
