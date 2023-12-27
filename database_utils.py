@@ -1,11 +1,14 @@
-import yaml
+import pandas as pd
 import psycopg2
 from sqlalchemy import create_engine, inspect, text
-import pandas as pd
+import yaml
+
 
 
 #class to connect to database
 class DatabaseConnector():
+    def __init__(self):
+        pass
 
     #read yaml with db credentials and store as dictionary
     def read_db_creds(self):        
@@ -18,17 +21,17 @@ class DatabaseConnector():
         credentials = self.read_db_creds()
         engine = create_engine(f"{'postgresql'}+{'psycopg2'}://{credentials['RDS_USER']}:{credentials['RDS_PASSWORD']}@{credentials['RDS_HOST']}:{credentials['RDS_PORT']}/{credentials['RDS_DATABASE']}")
 
-        #will need to engine.commit() aftere very transaction 
+        #?will need to engine.commit() aftere very transaction 
         return engine.connect() #instead of engine.execution_options(isolation_level='AUTOCOMMIT').connect()
 
     #list all the tables in the database
-    def list_db_tables(self):
+    def list_db_tables(self) ->list:
         engine = self.init_db_engine()
         inspector = inspect(engine)
         return inspector.get_table_names()
 
     #TODO add password
-    def upload_to_db(self, df, table_name):
+    def upload_to_db(self, df, table_name) -> None:
         self.df = df
         self.table_name = table_name
         password_db = input("database password? ")
@@ -62,11 +65,4 @@ if __name__ == "__main__":
 
 
 
-
-
-# #testing methods- can delete later 
-# test_class = DatabaseConnector()
-# dict_test = test_class.read_db_creds()
-# test_class.init_db_engine()
-# test_class.list_db_tables()
 

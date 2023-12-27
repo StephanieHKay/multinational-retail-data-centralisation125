@@ -1,11 +1,12 @@
-import pandas as pd
-from sqlalchemy import create_engine, inspect, text
+import boto3
 from database_utils import DatabaseConnector
 from IPython.display import display
-import tabula
-import requests
-import boto3
 import json
+import pandas as pd
+import requests
+from sqlalchemy import create_engine, inspect, text
+import tabula
+
 
 
 #read data from RDS database
@@ -88,13 +89,3 @@ class DataExtractor():
 
 
 
-
-
- 
-# data =DataExtractor().extract_from_s3()
-# pd.set_option("display.max_columns", None)
-# display(data.head(60))
-
-# data_test = DataExtractor()
-# pd.set_option("display.max_columns", None)
-# data_test.retrieve_stores_data().info()

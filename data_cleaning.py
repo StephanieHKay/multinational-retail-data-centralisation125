@@ -7,8 +7,7 @@ import numpy as np
 import re
 import tabula
 
-class Datacleaning():
-           
+class Datacleaning():           
     
     #cleans null values, errors with dates, incorrecrtly typed values and rows filled with the wrong information
     def clean_user_data(self):
@@ -56,10 +55,8 @@ class Datacleaning():
 
         #card numbers with question marks
         data_frame.card_number=data_frame.card_number.astype(str)
-        data_frame.card_number = data_frame.card_number.str.replace("?", "")
-        #data_frame.card_number=data_frame.card_number.astype(int)
-
-        #expire dates incorrect    
+        data_frame.card_number = data_frame.card_number.str.replace("?", "")        
+        
         #reset index
         data_frame.reset_index(inplace=True, drop=True)
         
@@ -183,7 +180,8 @@ class Datacleaning():
         return self.events_df
 
 
-
+if __name__== "__main__":
+    main()
 
 # events_df = Datacleaning().clean_events_data()
 # display(events_df.info())
