@@ -42,7 +42,7 @@ class DatabaseConnector():
 if __name__ == "__main__":
     from data_cleaning import Datacleaning
     from data_extraction import DataExtractor
-    #"All Database tables: ['legacy_store_details', 'legacy_users', 'orders_table']"
+    # "All Database tables: ['legacy_store_details', 'legacy_users', 'orders_table']"
     print("All Database tables:", DatabaseConnector().list_db_tables())
 
     DatabaseConnector().upload_to_db(Datacleaning().clean_user_data(), "dim_users")

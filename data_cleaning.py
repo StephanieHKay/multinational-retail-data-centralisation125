@@ -88,7 +88,6 @@ class Datacleaning():
         store_data = store_data.replace("NULL", np.nan)
       
         #drop nas
-        store_data = store_data.dropna(axis=0, how="any")
         store_data = store_data.dropna(subset=['staff_numbers', 'longitude', 'opening_date', 'latitude'], how='all')       
 
         #have only one index column
@@ -186,11 +185,6 @@ if __name__== "__main__":
     main()
 
    
-
-  
-
         
-        
-
 
   
