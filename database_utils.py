@@ -35,7 +35,7 @@ class DatabaseConnector():
         self.df = df
         self.table_name = table_name
         password_db = input("database password? ")
-        #local_engine = create_engine(f"postgresql+sycopg2://postgres:{password_db}@localhost:5432/Sales_Data")
+        local_engine = create_engine(f"postgresql+psycopg2://postgres:{password_db}@localhost:5432/sales_data")
         self.df.to_sql(self.table_name, local_engine, if_exists="replace")
 
 

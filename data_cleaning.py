@@ -12,7 +12,7 @@ class Datacleaning():
     #cleans null values, errors with dates, incorrecrtly typed values and rows filled with the wrong information
     def clean_user_data(self):
         #instantiate the datafram
-        self.df = DataExtractor.read_rds_table("legacy_users")    
+        self.df = DataExtractor().read_rds_table("legacy_users")    
         
         #set one index column
         self.df.set_index("index", inplace=True)
