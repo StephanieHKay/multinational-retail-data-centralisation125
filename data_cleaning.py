@@ -180,69 +180,12 @@ class Datacleaning():
         return self.events_df
 
 
+
+
 if __name__== "__main__":
     main()
 
-# events_df = Datacleaning().clean_events_data()
-# display(events_df.info())
-# display(events_df.head())
-
-# prod = Datacleaning()
-# prod_dataframe= prod.convert_product_weights()
-# pd.set_option("display.max_columns", None)
-# display(prod_dataframe.head(10))
-# # display(prod_dataframe.info())
-# cleaned_data = prod.clean_products_data()
-# # display(cleaned_data.info())
-# display(cleaned_data.head(60))
-
-# for weight in product_dataframe.weight:   
-#     print(weight) 
-#     if "x" in str(weight):
-#         split_weight = weight.split("x")
-#         amount= int(split_weight[0].strip())
-        
-#         if split_weight[1].strip().endswith("g"):
-#             indiv_weight = float(split_weight[1].replace("g", ""))/1000
-#         elif split_weight[1].strip().endswith("kg"):
-#             indiv_weight = float(split_weight[1].replace("kg", ""))
-        
-#         weight = amount * indiv_weight
-    
-#     elif str(weight).endswith("kg"):
-#         weight = float(weight.replace("kg", ""))
-    
-#     elif str(weight).endswith("ml"):        
-#         weight = float(weight.replace("ml", ""))/1000
-            
-#     elif str(weight).endswith("g"):
-#         weight = float(weight.replace("g", ""))/1000
-
-# display(f"new weights{product_dataframe.weight}")
-
-        
-    
-    
-
-
-
-# store_test = Datacleaning().clean_store_data()
-# store_test.info()
-
-# #card testing can delete later
-# data = Datacleaning().clean_card_data()
-# display(data.head())
-
-
-# pdfs_df = pd.concat(test_extracted)
-# pd.set_option("display.max_columns", None)
-# display(pdfs_df[11320:11340])
-# cleaned_df = Datacleaning()
-# print("\n cleaned:", cleaned_df.clean_card_data(pdfs_df[11320:11340]))
-
-
-
-          
+   
 
   
 
@@ -251,20 +194,3 @@ if __name__== "__main__":
 
 
   
-
-
-# #testing
-# orders_table = (Datacleaning().clean_user_data("legacy_users"))
-# pd.set_option("display.max_columns", None)
-# display(orders_table.head(10))
-# #display(orders_table.info())
-# # display(orders_table.groupby(["country_code"]).groups)
-# #display(orders_table.describe())
-
-# count=0
-# for num in orders_table["phone_number"]:
-#      pattern = r'^(?!.*\s)(?!.{10,11}$)[0-9,./a-zA-Z]+$'
-#      if not re.match (pattern, num):
-#         print(num)
-#         count+=1
-# print(count)
