@@ -45,23 +45,23 @@ if __name__ == "__main__":
     # "All Database tables: ['legacy_store_details', 'legacy_users', 'orders_table']"
     print("All Database tables:", DatabaseConnector().list_db_tables())
 
-    DatabaseConnector().upload_to_db(Datacleaning().clean_user_data(), "dim_users")
-    print("Uploaded cleaned USER data to local DB")  
+    # DatabaseConnector().upload_to_db(Datacleaning().clean_user_data(), "dim_users")
+    # print("Uploaded cleaned USER data to local DB")  
 
-    DatabaseConnector().upload_to_db(Datacleaning().clean_card_data(), "dim_card_details") 
-    print("Uploaded cleaned CARD data to local DB")  
+    # DatabaseConnector().upload_to_db(Datacleaning().clean_card_data(), "dim_card_details") 
+    # print("Uploaded cleaned CARD data to local DB")  
 
-    DatabaseConnector().upload_to_db(Datacleaning().clean_store_data(), "dim_store_details") 
-    print("Uploaded cleaned STORE data to local DB")    
+    # DatabaseConnector().upload_to_db(Datacleaning().clean_store_data(), "dim_store_details") 
+    # print("Uploaded cleaned STORE data to local DB")    
 
-    DatabaseConnector().upload_to_db(Datacleaning().clean_products_data(), "dim_products") 
-    print("Uploaded cleaned PRODUCT data to local DB")    
+    # DatabaseConnector().upload_to_db(Datacleaning().clean_products_data(), "dim_products") 
+    # print("Uploaded cleaned PRODUCT data to local DB")    
 
-    DatabaseConnector().upload_to_db(Datacleaning().clean_orders_data(), "orders_table") 
-    print("Uploaded cleaned ORDERS data to local DB")    
+    # DatabaseConnector().upload_to_db(Datacleaning().clean_orders_data(), "orders_table") 
+    # print("Uploaded cleaned ORDERS data to local DB")    
 
-    DatabaseConnector().upload_to_db(Datacleaning().clean_events_data(), "dim_date_times") 
-    print("Uploaded cleaned EVENTS data to local DB")    
+    # DatabaseConnector().upload_to_db(Datacleaning().clean_events_data(), "dim_date_times") 
+    # print("Uploaded cleaned EVENTS data to local DB")    
 
 
 

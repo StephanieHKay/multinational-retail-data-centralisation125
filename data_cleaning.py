@@ -18,14 +18,10 @@ class Datacleaning():
         self.df.set_index("index", inplace=True)
 
         #convert date_of_birth and join_date to datetime 
-        self.df.date_of_birth =pd.to_datetime(self.df.date_of_birth, infer_datetime_format=True, errors="coerce")
-        self.df.join_date =pd.to_datetime(self.df.join_date, infer_datetime_format=True, errors="coerce")
+        #self.df.date_of_birth =pd.to_datetime(self.df.date_of_birth, infer_datetime_format=True, errors="coerce")
+        #self.df.join_date =pd.to_datetime(self.df.join_date, infer_datetime_format=True, errors="coerce")
         
-
-        #drop null rows once coverted to recongisable null
-        self.df = self.df.replace("NULL", np.nan)
-        self.df = self.df.dropna(axis=0, how="any")
-
+    
         #groupings show GGB,GB,DE,US country codes but only US,UK,Denmark countries
         #convert GBB to GB
         self.df.replace("GGB", "GB", inplace=True)
@@ -34,7 +30,15 @@ class Datacleaning():
         for email in self.df.email_address:
             if not re.match((r"^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$"), email) and "@@" in email:
                 self.df.email_address = self.df.email_address.str.replace("@@", "@")
-        
+
+        #correct country codes
+        self.df.country_code = self.df.country_code.apply(lambda x: np.nan if len(x) > 2 else x)
+            
+
+         #drop null rows once coverted to recongisable null
+        self.df = self.df.replace("NULL", np.nan)
+        self.df = self.df.dropna(axis=0, how="any")
+
         return self.df
         
     #TODO clean phone numbers to more uniform
@@ -47,11 +51,16 @@ class Datacleaning():
         #payment dates muddled formats make more uniform
         data_frame.date_payment_confirmed =pd.to_datetime(data_frame.date_payment_confirmed, infer_datetime_format=True, errors="coerce")
 
+        #ensure correct expiry date
+        valid_expiry_dates = data_frame.expiry_date.str.match(r"^(0[1-9]|1[0-2])\/?([0-9]{2})$")
+        data_frame = data_frame[valid_expiry_dates] 
+      
         #convert null to na
         data_frame = data_frame.replace("NULL", np.nan)
 
          #drop na rows
-        data_frame = data_frame.dropna(axis=0, how="any")
+        data_frame = data_frame.dropna(subset=['card_number', 'expiry_date'])
+
 
         #card numbers with question marks
         data_frame.card_number=data_frame.card_number.astype(str)
@@ -113,6 +122,15 @@ class Datacleaning():
     
             weight = amount * indiv_weight
             return weight
+        
+        elif str(weight).endswith("."):
+            weight = weight.replace(".", "").strip()
+            if str(weight).endswith("g"):
+                weight= float(weight.replace("g", ""))/1000
+            elif str(weight).endswith("kg"):
+                weight= float(weight.replace("kg", ""))
+            return weight
+
 
         elif str(weight).endswith("kg"):
             weight = float(weight.replace("kg", ""))
@@ -146,7 +164,7 @@ class Datacleaning():
         self.product_df.product_price = pd.to_numeric(self.product_df.product_price, errors='coerce')
 
         #make date uniform
-        self.product_df.date_added = pd.to_datetime(self.product_df.date_added, infer_datetime_format=True, errors="coerce")
+        #self.product_df.date_added = pd.to_datetime(self.product_df.date_added, infer_datetime_format=True, errors="coerce")
 
 
         #drop nas
@@ -182,9 +200,7 @@ class Datacleaning():
 
 
 if __name__== "__main__":
-    main()
+    Datacleaning()          
+    
 
-   
-        
 
-  
