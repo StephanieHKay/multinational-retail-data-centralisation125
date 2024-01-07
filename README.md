@@ -26,7 +26,9 @@ The following technologies were used:
 - PyYAML
 - psycopg2
 - boto3
-- tabula-py
+- tabula
+- requets
+
 
 Use the command below in the database_utils.py this file:
 ```
