@@ -20,9 +20,8 @@ class DatabaseConnector():
     def init_db_engine(self):
         credentials = self.read_db_creds()
         engine = create_engine(f"{'postgresql'}+{'psycopg2'}://{credentials['RDS_USER']}:{credentials['RDS_PASSWORD']}@{credentials['RDS_HOST']}:{credentials['RDS_PORT']}/{credentials['RDS_DATABASE']}")
-
-        #?will need to engine.commit() aftere very transaction 
-        return engine.connect() #instead of engine.execution_options(isolation_level='AUTOCOMMIT').connect()
+        
+        return engine.connect() 
 
     #list all the tables in the database
     def list_db_tables(self) ->list:
@@ -33,9 +32,8 @@ class DatabaseConnector():
     #TODO add password
     def upload_to_db(self, df, table_name) -> None:
         self.df = df
-        self.table_name = table_name
-        password_db = input("database password? ")
-        local_engine = create_engine(f"postgresql+psycopg2://postgres:{password_db}@localhost:5432/sales_data")
+        self.table_name = table_name        
+        local_engine = create_engine(f"postgresql+psycopg2://postgres:{'password_db'}@localhost:5432/sales_data")
         self.df.to_sql(self.table_name, local_engine, if_exists="replace")
 
 

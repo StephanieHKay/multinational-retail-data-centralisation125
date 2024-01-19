@@ -6,13 +6,15 @@ import pandas as pd
 import requests
 from sqlalchemy import create_engine, inspect, text
 import tabula
+import yaml
 
 
 
 #read data from RDS database
 class DataExtractor():
     def __init__(self):
-        self.header_dict = {"x-api-key": "yFBQbwXe9J3sd6zWVAMrK6lcxxr0q1lr2PT6DDMX" }
+        creds = DatabaseConnector().read_db_creds()
+        self.header_dict = {"x-api-key":creds['api_key'] }
     
     #extracting the database table to a pandas datafram
     def read_rds_table(self, table_name):
@@ -27,7 +29,7 @@ class DataExtractor():
             return df
         
         else:
-            raise FileNotFoundError("This file name is not in the AWS database, retry and remember to be case-sensitive.")
+            raise OperationalError("This file name is not in the AWS database, retry and remember to be case-sensitive.")
     
     #get user card details from pdf doc
     def retrieve_pdf_data(self, link):
